@@ -1,21 +1,38 @@
 <?php
+namespace Draffft;
 /**
- * @package 	Draffft
- * @copyright	2011 - 2012 (c) devxdev.com
- * @license		GPL v2
- * @Author		Devon Hazelett <xdev@devxdev.com>
+ * Soule Content Management Framework
  *
- * $Id: SF_Draffft.class.php 25 2012-05-17 18:13:30Z Devon $
- * $Revision: 25 $
+ * Open Source, Super Simple CMF
+ *
+ * @package    Soule
+ * @subpackage Soule.Applications.Draffft
+ * @version    1.0.0
+ * @copyright  2011 - 2012 (c) devxdev.com
+ * @license    Apache License, Version 2.0 <http://www.apache.org/licenses/LICENSE-2.0.html>
+ * @author     Soule
+ * @link       http://soule.io/
+ * @since      1.0.0
+ * @filesource
  */
-defined('DT_EXEC') or die('You cannot access this script directly! ' . __FILE__);
-
-class SF_Draffft {
+defined('DT_EXEC') or die('You cannot access this script directly!');
+/**
+ * Draffft Class
+ * Main object for the Draffft Application.
+ *
+ * @package     Soule.Applications.Draffft
+ * @subpackage  Libs
+ * @category    Classes
+ * @author      Soule
+ * @version     1.0.0
+ */
+class Draffft
+{
 	
 	private $db;
 	
 	
-	public function __construct($db) {
+	public function __construct(\Soule\SQL $db) {
 		$this->db = $db;
 	}
 	

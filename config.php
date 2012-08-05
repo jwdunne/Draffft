@@ -1,19 +1,25 @@
 <?php
 /**
- * @package 	Draffft
- * @copyright	2011 - 2012 (c) devxdev.com
- * @license		GPL v2
- * @Author		Devon Hazelett <xdev@devxdev.com>
+ * Soule Content Management Framework
  *
- * $Id: config.php 25 2012-05-17 18:13:30Z Devon $
- * $Revision: 25 $
+ * Open Source, Super Simple CMF
+ *
+ * @package    Soule
+ * @subpackage Soule.Applications.Draffft
+ * @version    1.0.0
+ * @copyright  2011 - 2012 (c) devxdev.com
+ * @license    Apache License, Version 2.0 <http://www.apache.org/licenses/LICENSE-2.0.html>
+ * @author     Soule
+ * @link       http://soule.io/
+ * @since      1.0.0
+ * @filesource
  */
-defined('SF_EXEC') or $core->di->Error->error(['title' => 'INVALID REQUEST', 'message' => 'You cannot access this script directly!'], 2);
+defined('SF_EXEC') or die('This application requires Soule CMF v1.1.0 or greater to run.');
 define('DTPRE', DB_PRE . 'draffft_');
 
 
-require_once $application->lib('Draffft', true);
+require_once DT_BASE . 'Draffft.class.php';
 
-$draffft 	= new SF_Draffft($db);
+$draffft 	= new Draffft\Draffft($db);
 
-define('DT_CONFIGED', 1);
+define('DT_CONFIGED', true);
