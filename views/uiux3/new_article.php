@@ -1,4 +1,4 @@
-<?php require_once $public->render('meta'); ?>
+    <?php require_once $public->render('meta'); ?>
 		<?=$application->stylesheet();?>
 		<?=$public->jscript($uri->create_uri('plugins', 'texteditors', 'souleedit', 'sf-edit.js'));?>
 		<script>
@@ -75,4 +75,4 @@
 				</form>
 			</div>
 		</div>
-	<?php require_once $public->render('footer');?>
+	<?php require_once $public->render('footer');

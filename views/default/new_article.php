@@ -75,4 +75,4 @@
 				</form>
 			</div>
 		</div>
-	<?php require_once $public->render('footer');?>
+	<?php require_once $public->render('footer');

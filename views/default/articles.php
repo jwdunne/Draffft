@@ -65,8 +65,8 @@
 						<a href="<?=$uri->create_uri($uri->get_slug(0), 'new');?>" class="sf-uix-button color-blue">New Article</a>
 					</div>
 				<?php endif;?>
-				<h1><?=$core->settings('draffft_name');?></h1>
-				<p><?=$core->settings('draffft_slogan');?></p>
+				<h1><?=Settings::read('draffft_name');?></h1>
+				<p><?=Settings::read('draffft_slogan');?></p>
 			</div>
 			<div class="shadow"></div>
 		</div>
@@ -114,4 +114,4 @@
 				<?php endif;?>
 			</div>
 		</div>		
-<?php require_once $public->render('footer'); ?>
+<?php require_once $public->render('footer');

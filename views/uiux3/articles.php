@@ -1,4 +1,6 @@
-<?php require_once $public->render('meta'); ?>
+<?php use Soule\Applications\Draffft\Models\Articles_Model as Articles;
+
+require_once $public->render('meta'); ?>
 		<?=$application->stylesheet();?>
 		<script type="text/javascript">
 		$(d).ready(function() {
@@ -50,37 +52,44 @@
 		<div class="page-wrapper articles">
 			<div class="draffft-title-wrapper">
 				<div class="draffft-title-container clr">
-					<h1><?=$core->settings('draffft_name');?></h1>
-					<p><?=$core->settings('draffft_slogan');?></p>
+					<h1><?=Settings::read('draffft_name', 'Draffft')?></h1>
+					<p><?=Settings::read('draffft_slogan', 'A blogging app built for Soule');?></p>
 				</div>
 			</div>
 			
-			<?php if($auth->can('draffft_post_article')) : ?>
+			<div class="crumby-wrapper">
+    			<?=$uri->crumby();?>
+    		</div>
+    		<div class="paginations fr">
+				<?=$paginate->display_pages();?>
+			</div>
+			
+			<?php if ($auth->can('draffft_post_article')) : ?>
 			<div class="draffft-new-article-container clr">
 				<span>Author Controls</span>
 				<div class="draffft-new-button-container">
 					<a href="<?=$uri->create_uri($uri->get_slug(0), 'new');?>" class="sf-uix-button color-android">New Article</a>
 					<a href="<?=$uri->create_uri('admincp', 'draffft');?>" class="sf-uix-button color-blue">Edit Articles</a>
-					<button class="sf-uix-button smaller close-admin-bar">&times;</button>
+					<button class="sf-uix-button smaller close-admin-bar icon-remove-sign"></button>
 				</div>
 			</div>
-			<?php endif;?>
-		
-			<div class="page-container">
-				<?php
-				if($model->total_articles() !== 0) :
+			<?php endif; ?>
+		    
+		    <div class="page-container">
+			    <?php
+				if(Articles::total_articles() !== 0) :
 					while($article 	= $db->fassoc($articles)) :
 						$author		= $auth->get_user((int)$article['user_id']);
 				?>
 				<div class="article-wrapper">
 					<div class="article-container">
 						<div class="article-header-container clr">
-							<i class="article-header-icon dsprite pencil"></i>
+							<i class="article-header-icon icon-pencil"></i>
 							<h2 class="article-header-title">
 								<a class="article-link" href="<?=$uri->create_uri($uri->get_slug(0), $article['slug']);?>" data-desc="<?=$article['description']?>"><?=$article['title'];?></a>
 							</h2>
 							<h4 class="article-header-date"><?=(time_since($article['date']));?></h4>
-							<i class="article-header-time-icon dsprite house"></i>
+							<i class="article-header-time-icon icon-time"></i>
 						</div>
 						<div class="article-content-wrapper">
 							<div class="article-content-container">
@@ -89,17 +98,18 @@
 							<div class="article-content-hovered-container">
 								<div class="article-quick-actions fr">
 									<a href="<?=$uri->create_uri($uri->get_slug(0), 'like', $article['slug']);?>">
-										<i class="dsprite32 like"></i>
-										<span class="sprite-hover">0</span>
+										<i class="icon-heart" ></i>
+										<?php // XXX ?>
+										<span class="sprite-hover"><?=Articles::article_likes($article['id']);?></span>
 									</a>
 									<a href="<?=$uri->create_uri($uri->get_slug(0), $article['slug']);?>#comments">
-										<i class="dsprite32 comment"></i>
-										<span class="sprite-hover"><?=$model->article_comment_count((int)$article['id']);?></span>
+										<i class="icon-comments"></i>
+										<span class="sprite-hover"><?=Articles::article_comment_count((int)$article['id']);?></span>
 									</a>
 								</div>
 								<div class="article-view-button-container">
 									<div class="article-view-button clr" data-url="<?=$uri->create_uri($uri->get_slug(0), $article['slug']);?>">
-										<i class="dsprite view"></i>
+										<i class="icon-eye-open"></i>
 										<span>Continue Reading</span>
 									</div>
 								</div>
@@ -134,6 +144,12 @@
 					</div>
 				</div>
 				<?php endif;?>
+				
+				<div class="paginations centered">
+    				<?=$paginate->display_pages();?>
+    			</div>
+    			
 			</div>
+			
 		</div>
-<?php require_once $public->render('footer'); ?>
+<?php require_once $public->render('footer');

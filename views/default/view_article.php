@@ -83,9 +83,10 @@
 				<a href="<?=$uri->create_uri('draffft')?>" class="sf-uix-button color-blue">Home</a>
 				<a href="#top" class="sf-uix-button color-blue">Top</a>
 			</div>
-			<?php if($article['allow_comments']) :
-				require_once $application->render('comments');
-				
+			<?php
+			require_once $application->render('comments');
+			
+			if($article['allow_comments']) :
 				if($auth->is_authd() && $auth->can('draffft_post_comment')) : ?>
 				<textarea></textarea>
 				<?php endif; ?>
@@ -94,4 +95,4 @@
 				<h2 class="article-comments-closed">Comments are closed for this article.</h2>
 			<?php endif; ?>
 		</div>
-<?php require_once $public->render('footer'); ?>
+<?php require_once $public->render('footer');

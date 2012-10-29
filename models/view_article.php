@@ -1,4 +1,5 @@
 <?php
+namespace Soule\Applications\Draffft\Models;
 /**
  * @package 	Draffft
  * @subpackage	Models
@@ -10,62 +11,71 @@
  * $Revision: 25 $
  */
 
-class DT_View_Article_Model {
+class View_Article_Model
+{
 	
-	public 	$article_id;
-	private $db;
-	public 	$author_id;
-	private $comment_count;
-	private $threaded_count = 0;
+	public static $article_id;
 	
-	public function __construct($article_id, $db) {
-		$this->article_id = $article_id;
-		$this->db = $db;
-	}
+	public static $author_id;
 	
-	public function get_article() {
-		$article = $this->db->fq("
+	private static $db;
+	
+	private static $comment_count;
+	
+	private static $threaded_count = 0;
+	
+	public static function get_article($article_id, \Soule\SQL $db)
+	{
+	    static::$article_id = $article_id;
+	    static::$db = $db;
+	    
+		$article = static::$db->fq("
 			SELECT
 				*
 			FROM
-				`".DTPRE."articles` AS `articles`
+				`" . DTPRE . "articles` AS `articles`
 			INNER JOIN
-				`".DTPRE."categories` AS `categories`
+				`" . DTPRE . "categories` AS `categories`
 			ON
 				`articles`.`category_id` = `categories`.`id`
 			WHERE
-				`articles`.`id` = {$this->article_id}
+				`articles`.`id` = '{$article_id}'
 			LIMIT 1
 		");
-		$this->author_id = $article['user_id'];
+		static::$author_id = $article['user_id'];
 		
-		return $article; 
+		return $article;
 	}
 	
-	public function get_comments() {
-		return $this->db->query("SELECT * FROM `" . DTPRE . "comments` WHERE `article_id`='{$this->article_id}' AND `reply_to`='0'");
+	public static function get_comments()
+	{
+		return static::$db->query("SELECT * FROM `" . DTPRE . "comments` WHERE `article_id`='" . static::$article_id . "' AND `reply_to`='0'");
 	}
 	
-	public function get_comment_count() {
-		return $this->comment_count = $this->db->num($this->get_comments());
+	public static function get_comment_count()
+	{
+		return static::$comment_count = static::$db->num(static::get_comments());
 	}
 	
-	public function get_threaded_comment($parent_id) {
-		$replies = $this->db->query("SELECT * FROM `" . DTPRE . "comments` WHERE `article_id`='{$this->article_id}' AND `reply_to`='{$parent_id}'");
-		if((int)$this->db->num($replies) !== 0) {
+	public static function get_threaded_comment($parent_id)
+	{
+		$replies = static::$db->query("SELECT * FROM `" . DTPRE . "comments` WHERE `article_id`='" . static::$article_id . "' AND `reply_to`='{$parent_id}'");
+		if(static::$db->num($replies) !== 0) {
 			return $replies;
 		} else {
 			return false;
 		}
 	}
 	
-	public function get_tags() {
-		
+	public static function get_tags()
+	{
+		// XXX probably not going to use article tags.
 	}
 	
-	public function show_comments($comments) {
+	public static function show_comments($comments)
+	{
 		global $auth, $uri;
-		while($comment = $this->db->fassoc($comments)) :
+		while($comment = static::$db->fassoc($comments)) :
 			$c_user = $auth->get_user((int)$comment['user_id']);
 		?>
 		<?php if((int)$comment['status'] == 0) : ?>
@@ -73,39 +83,59 @@ class DT_View_Article_Model {
 			<div class="spam-warning">
 				<h4>This comment has been marked as spam by the community.</h4>
 				<div class="article-comment-actions">
-					<input type="button" data-id="<?=$comment['id']?>" class="sf-uix-button color-blue show" value="Show" />
+					<a data-id="<?=$comment['id']?>" class="sf-uix-button color-blue smaller show">
+					    <i class="icon-eye-open"></i>
+					</a>
 				</div>
 			</div>
 		<?php endif; ?>
-		<div id="<?=$comment['id']?>" class="article-comment-wrapper clr<?=((int)$comment['status'] == 0 ? ' spam' : false)?><?=((int)$comment['reply_to'] !== 0 ? " in-reply reply-num-{$this->threaded_count}" : false);?><?=((int)$comment['user_id'] == $this->author_id ? ' author' : false);?>">
+		<div id="<?=$comment['id']?>" class="article-comment-wrapper clr<?=((int)$comment['status'] == 0 ? ' spam' : false)?><?=((int)$comment['reply_to'] !== 0 ? " in-reply reply-num-" . static::$threaded_count : false);?><?=((int)$comment['user_id'] == static::$author_id ? ' author' : false);?>">
 			<div class="article-author-image-border">
 				<img src="<?=$auth->user_avatar($c_user['username'])?>" alt="" />
 			</div>
 			<div class="article-comment-data">
-				<h3 class="article-comment-username"><?=($c_user['username'] == $auth->get_user_info('username') ? 'You' : "{$c_user['first']} {$c_user['last']} ({$c_user['username']})");?><?=((int)$comment['user_id'] == $this->author_id ? '<span class="comment-author-block">author</span>' : false);?></h3>
+				<h3 class="article-comment-username"><?=($c_user['username'] == $auth->get_user_info('username') ? 'You' : "{$c_user['first']} {$c_user['last']} ({$c_user['username']})");?><?=((int)$comment['user_id'] == static::$author_id ? '<span class="comment-author-block">author</span>' : false);?></h3>
 				<h4 class="article-comment-timestamp"><?=(time_since($comment['date']));?></h4>
-				<p><?=$comment['comment']?></p>
+				<p><?=$comment['comment'];?></p>
 				<div class="article-comment-actions">
-					<?php if((int)$auth->get_user_info('id') !== (int)$c_user['id'] && $auth->can('draffft_post_comment') || $auth->is_authd('mod')) :?>
-					<input type="button" data-id="<?=$comment['id']?>" class="sf-uix-button color-android" value="Reply" />
-					<?php endif; ?>
-					<?php if($auth->get_user_info('id') == $this->author_id || $auth->is_authd('mod') || $auth->can('draffft_delete_comment')) : ?>
-					<input type="button" data-id="<?=$comment['id']?>" class="sf-uix-button color-red delete" value="Delete" />
-					<?php elseif($auth->is_authd() && (int)$auth->get_user_info('id') !== (int)$c_user['id']) : ?>
-					<input type="button" data-id="<?=$comment['id']?>" class="sf-uix-button color-red flag" value="Flag" />
-					<?php endif; ?>
+				    <?=static::comment_actions($comment['id'], (int)$auth->get_user_info('id'), (int)$c_user['id']);?>
 				</div>
 			</div>
 		</div>
 		<?php if((int)$comment['status'] == 0) : ?>
 		</div>
 		<?php endif; ?>
-		<?php 
-		if($this->get_threaded_comment($comment['id']) !== false) {
-			$this->threaded_count++;
-			$this->show_comments($this->get_threaded_comment($comment['id']));
-		}
+		<?php
+		if(static::get_threaded_comment($comment['id']) !== false) :
+			static::$threaded_count++;
+			static::show_comments(static::get_threaded_comment($comment['id']));
+		endif;
 		endwhile;
+	}
+	
+	private static function comment_actions($comment_id, $user_id, $commenter_user_id)
+	{
+	    global $auth;
+	    $action = [
+            'reply'  => ['#', 'icon-share'],
+            'flag'   => ['#', 'icon-flag'],
+            'delete' => ['#', 'icon-remove-circle'],
+            'hide'   => ['#', 'icon-eye-close']
+        ];
+	    if ($user_id !== $commenter_user_id && $auth->can('draffft_post_comment') || $auth->is_authd('mod')) :
+	        $buttons[] = "<a href='{$action['reply'][0]}' class='sf-uix-button smaller color-android' data-id='{$comment_id}' data-origin-title='Reply'><i class='{$action['reply'][1]}'></i></a>";
+	    endif;
+	    if ($auth->is_authd() && $user_id !== $commenter_user_id) :
+	    $buttons[] = "<a href='{$action['hide'][0]}' class='sf-uix-button smaller color-blue' data-id='{$comment_id}' data-origin-title='Hide'><i class='{$action['hide'][1]}'></i></a>";
+	    endif;
+	    if ($auth->is_authd() && $user_id !== $commenter_user_id) :
+	        $buttons[] = "<a href='{$action['flag'][0]}' class='sf-uix-button smaller color-red' data-id='{$comment_id}' data-origin-title='Flag'><i class='{$action['flag'][1]}'></i></a>";
+	    endif;
+	    if ($user_id == static::$author_id || $auth->is_authd('mod') || $auth->can('draffft_delete_comment')) :
+	        $buttons[] = "<a href='{$action['delete'][0]}' class='sf-uix-button smaller color-red' data-id='{$comment_id}' data-origin-title='Delete'><i class='{$action['delete'][1]}'></i></a>";
+	    endif;
+	    
+	    return implode(PHP_EOL, $buttons);
 	}
 	
 }

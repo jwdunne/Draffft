@@ -1,4 +1,4 @@
-<?php require_once $public->render('meta'); ?>
+    <?php require_once $public->render('meta'); ?>
 		<?=$application->stylesheet();?>
 		<?php
 		if($article['allow_comments'] && $auth->is_authd() && $auth->can('draffft_post_comment')) :
@@ -40,6 +40,7 @@
 	<body>
 		<?php require_once $public->render('header');?>
 		<div class="page-wrapper article">
+			
 			<div class="draffft-title-wrapper">
 				<div class="draffft-title-container clr">
 					<h1><?=$article['title'];?></h1>
@@ -50,6 +51,9 @@
 				</div>
 			</div>
 			
+			<div class="crumby-wrapper">
+    			<?=$uri->crumby();?>
+    		</div>
 			<?php if($auth->can('draffft_edit_article')) : ?>
 			<div class="draffft-new-article-container clr">
 				<span>Author Controls</span>
@@ -75,16 +79,17 @@
 						<p class="about-author-pgraph"><a href="#"><?=$author['first'] . ' ' . $author['last'];?></a> <?=$author['draffft_about'];?></p>
 					</div>
 				</div>
-				<?php endif; ?>	
+				<?php endif; ?>
 			</div>
 			<div>
 				<a href="<?=$uri->create_uri('draffft')?>" class="sf-uix-button color-blue">Home</a>
 				<a href="#top" class="sf-uix-button color-blue">Top</a>
 			</div>
-			<?php if($article['allow_comments']) :
-				require_once $application->render('comments');
-				
-				if($auth->is_authd() && $auth->can('draffft_post_comment')) : ?>
+			<?php
+			require $application->render('comments');
+			
+			if ($article['allow_comments']) :
+				if ($auth->is_authd() && $auth->can('draffft_post_comment')) : ?>
 				<textarea></textarea>
 				<?php endif; ?>
 			
@@ -92,4 +97,4 @@
 				<h2 class="article-comments-closed">Comments are closed for this article.</h2>
 			<?php endif; ?>
 		</div>
-<?php require_once $public->render('footer'); ?>
+<?php require_once $public->render('footer');

@@ -2,7 +2,7 @@
 	<?php if($comment_count !== 0) : ?>
 	<h2 class="article-comments-annoted" id="comments">#Comments</h2>
 	<?php
-		$model->show_comments($comments);
+		Soule\Applications\Draffft\Models\View_Article_Model::show_comments($comments);
 	else :
 	?>
 	<h2 class="article-comments-annoted" id="comments">No Comments</h2>

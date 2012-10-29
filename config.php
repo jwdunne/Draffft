@@ -20,6 +20,7 @@ define('DTPRE', DB_PRE . 'draffft_');
 
 require_once DT_BASE . 'Draffft.class.php';
 
-$draffft 	= new Draffft\Draffft($db);
+$draffft  = new Soule\Application\Draffft($db);
+$paginate = new Soule\Pagination(Soule\Settings::read('draffft_articles_per_page'), $uri);
 
 define('DT_CONFIGED', true);

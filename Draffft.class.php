@@ -1,5 +1,5 @@
 <?php
-namespace Draffft;
+namespace Soule\Application;
 /**
  * Soule Content Management Framework
  *
@@ -32,11 +32,13 @@ class Draffft
 	private $db;
 	
 	
-	public function __construct(\Soule\SQL $db) {
+	public function __construct(\Soule\SQL $db)
+	{
 		$this->db = $db;
 	}
 	
-	public function get_slug($slug_val) {
+	public function get_slug($slug_val)
+	{
 		$slug_val = $this->db->res($slug_val);
 		$sql = $this->db->fq("SELECT `slug` FROM `".DTPRE."articles` WHERE `id`='{$slug_val}'");
 		if(count($sql) !== 0) {
@@ -46,7 +48,8 @@ class Draffft
 		}
 	}
 	
-	public function get_id($slug_val) {
+	public function get_id($slug_val)
+	{
 		$sql = $this->db->fq("SELECT `id` FROM `".DTPRE."articles` WHERE `slug`='{$slug_val}'");
 		if(count($sql) !== 0) {
 			return (int)$sql['id'];
@@ -55,7 +58,8 @@ class Draffft
 		}
 	}
 	
-	public function is_valid_article($article) {
+	public function is_valid_article($article)
+	{
 		$article = $this->db->res($article);
 		if(is_numeric($article) || preg_match('#^\d+$#', $article)) {
 			$article = (int)$article;
@@ -71,7 +75,8 @@ class Draffft
 				return false;
 			}
 		} else {
-			throw new Exception("Not a valid article\n\Attempted: {$article}");
+		    // XXX
+			throw new \Soule\SystemException("Not a valid article\n\Attempted: {$article}");
 			return false;
 		}
 	}

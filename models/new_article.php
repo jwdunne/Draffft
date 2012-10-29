@@ -1,21 +1,27 @@
 <?php
+namespace \Soule\Applications\Draffft\Models;
 
-class Draffft_New_Article_Model {
+class New_Article_Model
+{
 	
 	private $db;
+	
 	private $user_id;
 	
-	public function __construct($db, $user_id) {
+	public function __construct(\Soule\SQL $db, $user_id)
+	{
 		$this->db = $db;
 		$this->user_id = $user_id;
 	}
 	
-	public function cat_article($post) {
-		require_once SF_LIB . 'SF_Parse.class.php';
-		$parser = new SF_Parse();
+	public function cat_article($post)
+	{
+	    global $uri;
+		$parser = new \Soule\Parse();
 		
+		// XXX Almost 100% sure its supposed to be blog/(:num){1,}-(:any) for slugs
 		$this->db->query("
-			INSERT INTO `".DTPRE."articles` (
+			INSERT INTO `" . DTPRE . "articles` (
 				`id`,
 				`user_id`,
 				`date`,
@@ -31,7 +37,7 @@ class Draffft_New_Article_Model {
 				'" . $this->db->res($post['title']) . "',
 				'" . $this->db->res($post['desc']) . "',
 				'" . $this->db->res($parser->parse_style($post['body'])) . "',
-				'" . SF_URI::new_slug($post['title']) . "',
+				'" . $uri->create_uri('blog', $post['title']) . "',
 				'1'
 			)
 		");
@@ -40,7 +46,8 @@ class Draffft_New_Article_Model {
 				INSERT INTO `".DTPRE."categories`
 				VALUES(0, '{$post['cat']}', '{$this->db->last_id}')
 			");
-			if($this->db->last_id !== null) {
+			if($this->db->last_id !== null)
+			{
 				return true;
 			}
 		} else {
