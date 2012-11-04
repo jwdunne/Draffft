@@ -1,6 +1,6 @@
 <?php
 
-
+/*
 if(isset($_POST['action']) && $_POST['action'] == "new_article") {
 	require_once $application->model('new_article');
 	
@@ -9,3 +9,4 @@ if(isset($_POST['action']) && $_POST['action'] == "new_article") {
 }
 
 require_once $application->render('new_article');
+*/

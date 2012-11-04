@@ -5,24 +5,55 @@
  * Open Source, Super Simple CMF
  *
  * @package    Soule
- * @subpackage Soule.Applications.Campr
- * @version    1.0.0
+ * @version    2.0
  * @copyright  2011 - 2012 (c) devxdev.com
- * @license    Apache License, Version 2.0 <http://www.apache.org/licenses/LICENSE-2.0.html>
+ * @license    http://soule.io/license
  * @author     Soule
  * @link       http://soule.io/
- * @since      1.0.0
+ * @since      1.0
  * @filesource
  */
-defined('SF_EXEC') or die('This applications requires Soule to run!');
+use Soule\Application\Application,
+    Soule\Application\Settings,
+    Soule\Application\View,
+    Soule\HttpKernel\Route,
+    Soule\HttpKernel\Response;
 
-define('DT_EXEC', 1);
-
-if(!defined('DT_CONFIGED')) {
-	define('DT_BASE', str_replace(pathinfo(__FILE__, PATHINFO_BASENAME), '', __FILE__));
-	require_once DT_BASE . 'config.php';
+if (!defined('DT_CONFIGED'))
+{
+	define('DT_BASE',   pathinfo(__FILE__)['dirname'] . DS);
+	require DT_BASE . 'config' . DS . 'config.php';
 }
 
+Route::get(['/', 'articles', 'home'], function() {
+    
+    $title = ucwords(Application::get_data('name')) . ' | ' . Settings::read('site_name');
+
+    return View::make('articles')
+        ->add('meta', 'meta', ['title' => $title]);
+});
+
+Route::get(['new'], function() {
+    
+    return View::make('article/new');
+    
+});
+
+Route::get(['edit/(:num)-(:any)'], function() {
+    
+    
+    return View::make('article/edit');
+    
+});
+
+Route::get(['article/(:num)-(:any)'], function() {
+    
+    
+    return View::make('article/view');
+    
+});
+
+/*
 if($uri->in_slug(1, 'new')) {
 	require_once $application->controller('new_article');
 } elseif($uri->in_slug(1)) {
@@ -30,3 +61,4 @@ if($uri->in_slug(1, 'new')) {
 } else {
     require_once $application->controller('articles');
 }
+*/

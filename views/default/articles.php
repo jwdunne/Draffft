@@ -1,6 +1,5 @@
-<?php require_once $public->render('meta'); ?>
-		<?=$application->stylesheet();?>
-		<script type="text/javascript">
+<?=$meta;?>
+        <script type="text/javascript">
 		$(d).ready(function() {
 			$('.view-this-article').each(function() {
 
@@ -57,12 +56,12 @@
 		</style>
 	</head>
 	<body>
-	<?php require_once $public->render('header'); ?>
+	
 		<div class="draffft-title-wrapper">
 			<div class="draffft-title-container clr">
-				<?php if($auth->can('draffft_post_article') || $auth->is_authd('admin')) : ?>
+				<?php if (Auth::can('draffft_post_article') || Auth::can('admin')) : ?>
 					<div class="fr draffft-new-button-container">
-						<a href="<?=$uri->create_uri($uri->get_slug(0), 'new');?>" class="sf-uix-button color-blue">New Article</a>
+						<a href="<?=URI::make('new');?>" class="sf-uix-button color-blue">New Article</a>
 					</div>
 				<?php endif;?>
 				<h1><?=Settings::read('draffft_name');?></h1>
@@ -73,36 +72,36 @@
 		<div class="page-wrapper">
 			<div class="page-container">
 				<?php
-				if($model->total_articles() !== 0) :
-					while($article = $db->fassoc($articles)) :
+				//if ($model->total_articles() !== 0) :
+					//while($article = $db->fassoc($articles)) :
 				?>
 					<div class="article-wrapper">
 						<div class="article-container">
 							<div class="article-meta clr">
 								<h6>
-									<span><i class="sprite-ui sprite-ui-date-time"></i>Posted <?=time_since($article['date']);?></span>
-									<span><i class="sprite-users sprite-users-xfn-colleague"></i>By <?=$auth->get_user((int)$article['user_id'], 'username'); ?></span>
+									<span><i class="icon-time"></i>Posted <?php //TimeDate::time_since($article['date']);?></span>
+									<span><i class="icon-user"></i>By <?php //Auth::get_user((int)$article['user_id'], 'username'); ?></span>
 									<span>
-										<i class="sprite-balloon sprite-balloon-white"></i>
-										<a href="<?=$uri->create_uri($uri->get_slug(0), $article['slug']);?>#comments"><?=$model->article_comment_count((int)$article['id']);?> Comments</a>
+										<i class="icon-comment"></i>
+										<a href="<?php //URI::make($article['slug']);?>#comments">0<?php //$model->article_comment_count((int)$article['id']);?> Comments</a>
 									</span>
 								</h6>
 								<div class="article-title-n-description">
-									<h2><a class="article-link" href="<?=$uri->create_uri($uri->get_slug(0), $article['slug']);?>"><?=$article['title'];?></a></h2>
-									<h3><?=$article['description'];?></h3>
+									<h2><a class="article-link" href="<?php //URI::make($article['slug']);?>"><?php //$article['title'];?></a></h2>
+									<h3><?php //$article['description'];?></h3>
 								</div>
 							</div>
 							<div class="article-preview">
 								<div class="view-this-article"><h2>Read Article</h2></div>
 									<div class="pgraph-wrapper">
-										<?=strip_tags(substr($article['body'], 0, 1200), '<p><h1><h2><h3><h4><h5><h6><a><ol><ul><li><br>');?> [ . . . ]
+										<?php //strip_tags(substr($article['body'], 0, 1200), '<p><h1><h2><h3><h4><h5><h6><a><ol><ul><li><br>');?> [ . . . ]
 									</div>
 							</div>
 						</div>
 					</div>
 				<?php
-					endwhile;
-				else : ?>
+					//endwhile;
+				//else : ?>
 				<div class="article-wrapper">
 					<div class="article-container">
 						<div class="article-meta" style="margin:0px auto; text-align:center;">
@@ -111,7 +110,6 @@
 						</div>
 					</div>
 				</div>
-				<?php endif;?>
+				<?php //endif;?>
 			</div>
-		</div>		
-<?php require_once $public->render('footer');
+		</div>

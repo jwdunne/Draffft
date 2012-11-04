@@ -1,25 +1,24 @@
 <?php
-namespace \Soule\Applications\Draffft\Models;
 
-class New_Article_Model
+namespace Soule\Applications\Draffft\Models;
+
+use Soule\Parse;
+
+class New_Article_Model extends \Soule\Model
 {
 	
-	private $db;
+	private static $data = [];
 	
-	private $user_id;
-	
-	public function __construct(\Soule\SQL $db, $user_id)
+	public function __construct()
 	{
-		$this->db = $db;
-		$this->user_id = $user_id;
+		
 	}
 	
 	public function cat_article($post)
 	{
-	    global $uri;
-		$parser = new \Soule\Parse();
+		$parser = new Parse();
 		
-		// XXX Almost 100% sure its supposed to be blog/(:num){1,}-(:any) for slugs
+		// XXX Almost 100% sure its supposed to be blog/(:num)-(:any) for slugs
 		$this->db->query("
 			INSERT INTO `" . DTPRE . "articles` (
 				`id`,

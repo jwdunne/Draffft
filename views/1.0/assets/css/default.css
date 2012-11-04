@@ -1,0 +1,382 @@
+/**
+ * DRAFFFT
+ * copyright © 2012 devxdev.com
+ */
+/* HTML ELEMENTS */
+body, div, dl, dt, dd, li, h1, h2, h3, h4, h5, h6,
+pre, code, form, fieldset, legend, input,
+button, textarea, select, blockquote, ol, ul {
+	margin:					0px;
+	padding:				0px;
+}
+article, aside, details, figcaption,
+figure, footer, header, hgroup, nav, section {
+	display:				block;
+}
+audio, canvas, video {
+	display:				inline-block;
+	*display:				inline;
+	*zoom:1;
+}
+html, body {
+	height:					100%;
+}
+body {
+	font:					400 16px/22px "Ubuntu Condensed", Ubuntu, Tahoma;
+	text-rendering: 		optimizelegibility;
+	background:				rgb(200, 200, 200);
+	color:					rgb(51, 51, 51);
+}
+table {
+	border-collapse:		collapse;
+	border-spacing:			0px;
+	font-size:				16px;
+}
+p {
+	margin:					0px 0px 10px;
+}
+em {
+	letter-spacing:			1px;
+}
+ol, ul {
+	list-style:				none;
+	margin:					0px 0px 10px 25px;
+}
+ul ul, ul ol, ol ol, ol ul {
+	margin-bottom: 			0px;
+}
+ol.numerical {
+	list-style:				decimal outside;
+}
+ol.code-wrapper {
+	list-style:				decimal inside;
+}
+ul {
+	list-style:				disc;
+}
+a {
+	color:					rgb(65, 135, 210);
+	text-decoration:		none;
+}
+a:hover {
+	transition:				color 0.5s;
+	-webkit-transition:		color 0.5s;
+	-moz-transition:		color 0.5s;
+	-o-transition:			color 0.5s;
+	-ms-transition:			color 0.5s;
+	color:					rgb(0, 110, 205);
+}
+
+
+/* END HTML ELEMENTS */
+.clr{*zoom:1;}.clr:before,.clr:after{display:table;content:"";}.clr:after{clear:both;}
+
+/* GLOBAL HEADER */
+.draffft-title-container {
+	padding:				30px 15px;
+	margin:					0px auto;
+	background-color:		rgb(236, 236, 236);
+	border-bottom:			1px solid rgb(175, 175, 175);
+}
+.draffft-title-wrapper h6 {
+	font-size:				12px;
+	float:					right;
+	color:					rgb(65, 135, 232);
+}
+.draffft-title-wrapper h1 {
+	margin:					0px;
+	font-size:				48px;
+	line-height:			45px;
+	letter-spacing:			-2px;
+	text-align:				left;
+	/*text-shadow:			-1px -1px rgba(255, 255, 255, 0.785);*/
+	color:					rgb(52, 54, 56);
+}
+.draffft-title-wrapper p {
+	color:					rgb(52, 54, 56);
+	font-size:				18px;
+	line-height:			30px;
+	text-align:				left;
+}
+.draffft-title-wrapper .shadow {
+	height: 				2px;
+	width:					100%;
+	background: 			rgb(0, 0, 0);
+	opacity: 				0.10;
+	z-index: 				50;
+	position:				absolute;
+}
+/* END GLOBAL HEADER */
+
+/* ARTICLES CONTENT */
+.article-wrapper {
+	min-height:				100px;
+	margin:					0px 0px 15px;
+}
+.article-wrapper h6 {
+	font-size:				12px;
+	float:					right;
+	color:					rgb(65, 135, 232);
+}
+/* END ARTICLES CONTENT */
+
+/* VIEW_ARTICLE CONTENT */
+.page-wrapper {
+	background:				rgb(252, 252, 252);
+	border:					1px solid rgb(132, 132, 132);
+	border-top:				0px;
+	border-bottom-color:	rgb(125, 125, 125);
+	border-radius:			0px 0px 4px 4px;
+	box-shadow:				0px 5px 5px rgba(0, 0, 0, 0.275);
+	margin:					0px auto;
+	padding:				15px;
+}
+.page-container {
+	
+}
+.pgraph-wrapper {
+	padding:				10px 25px;
+}
+.pgraph-wrapper a {
+	border-bottom:			1px dotted rgb(65, 135, 210);
+}
+.pgraph-wrapper p {
+	line-height:			18px;
+}
+.pgraph-wrapper h2 {
+	margin:					10px 0px;
+}
+.pgraph-wrapper h2 > h6 {
+	margin:					0px 0px 10px;
+}
+.pgraph-wrapper h6 {
+	margin:					0px 0px 10px;
+	line-height:			18px;
+	font-size:				11px;
+}
+.push-ups {
+	height:					25px;
+	display:				block;
+	
+}
+div.note {
+	padding:				10px;
+	margin-bottom:			15px;
+	text-shadow:			0px 1px 0px rgb(255, 255, 255); /*0.5*/
+	background-color:		rgb(252, 248, 227);
+	border:					1px solid rgb(251, 238, 213);
+	border-radius:			3px;
+	-webkit-border-radius:	3px;
+	-moz-border-radius:		3px;
+	color:					rgb(192, 152, 83);
+}
+div.note.note-info {
+	background-color: 		rgb(217, 237, 247);
+	border-color: 			rgb(188, 232, 241);
+	color: 					rgb(58, 135, 173);
+}
+div.note.note-error {
+	background-color: 		rgb(242, 222, 222);
+	border-color: 			rgb(238, 211, 215);
+	color: 					rgb(185, 74, 72);
+}
+div.note h4 {
+	text-align:				left;
+}
+div.note p {
+	margin:					0px;
+}
+
+span.label {
+	vertical-align:			inherit;
+	margin-right:			5px;
+	padding: 				1px 4px 2px;
+	font-size: 				9px;
+	font-weight: 			900;
+	line-height: 			13px;
+	color: 					white;
+	white-space: 			nowrap;
+	text-shadow: 			0 -1px 0 rgba(0, 0, 0, 0.1);
+	background-color: 		rgb(153, 153, 153);
+	-webkit-border-radius: 	3px;
+	-moz-border-radius: 	3px;
+	border-radius: 			3px;
+}
+span.label.label-important {
+	background-color: 		rgb(185, 74, 72);
+}
+
+span.path {
+	color:					rgb(65, 155, 248);
+	font-family:			"Ubuntu Mono";
+	font-weight:			100;
+	background:				rgb(232, 232, 232);
+	padding-bottom:			2px;
+}
+span.note {
+	color:					rgb(205, 0, 110);
+}
+
+/**
+ * Table Styles
+ */
+.table {
+	max-width:				100%;
+	width:					100%;
+}
+.table th, .table td {
+	padding: 				8px;
+	line-height: 			18px;
+	text-align: 			left;
+	vertical-align: 		top;
+	border-top: 			1px solid rgb(221, 221, 221);
+}
+.table th {
+	font-weight: 			900;
+}
+.table.table-bordered {
+	border: 				1px solid rgb(221, 221, 221);
+	border-left: 			0px;
+	border-collapse: 		separate;
+	-webkit-border-radius: 	4px;
+	-moz-border-radius: 	4px;
+	border-radius: 			4px;
+}
+.table-bordered thead:first-child tr:first-child th, 
+.table-bordered tbody:first-child tr:first-child th,
+.table-bordered tbody:first-child tr:first-child td {
+	border-top: 			0px;
+}
+.table-striped tbody tr:nth-child(odd) td,
+.table-striped tbody tr:nth-child(odd) th {
+	background-color: 		rgb(248, 248, 248);
+}
+.table-bordered th, .table-bordered td {
+	border-left: 			1px solid rgb(221, 221, 221);
+}
+.table-condensed th, .table-condensed td {
+	padding: 				4px 5px;
+}
+.table tbody tr:hover td {
+	background-color:		rgb(245, 245, 245);
+}
+
+/**
+ * Code Formats
+ */
+.code-wrapper {
+	margin:					10px 0px;
+	padding:				5px;
+	list-style-position:	inside;
+	background:				rgb(255, 255, 255);
+	font-family:			"Ubuntu Mono";
+	border:					1px solid rgb(232, 232, 232);
+	border-radius:			2px;
+}
+.code-wrapper *::selection, .code-wrapper li::selection {
+	background:				rgb(252, 252, 51);
+}
+.code-wrapper *::-moz-selection, .code-wrapper li::-moz-selection {
+	background:				rgb(252, 252, 51);
+}
+.code-wrapper li {
+	font-family:			"Ubuntu Mono";
+	font-weight:			100;
+	white-space:			pre-wrap;
+	border:					1px solid rgb(232, 232, 232);
+	border-left-color:		rgb(0, 110, 205);
+	border-bottom:			0px;
+}
+.code-wrapper li:last-child {
+	border-bottom:			1px solid rgb(232, 232, 232);
+}
+.code-wrapper li.even {
+	background-color:		rgb(244, 244, 244);
+}
+.code-wrapper li.odd {
+	background-color:		rgb(248, 248, 248);
+}
+.code-wrapper li:hover {
+	background:				rgb(252, 252, 252);
+}
+.code-comment {
+	color:					rgb(25, 110, 25);
+}
+.code-var {
+	color:					rgb(0, 110, 205);
+}
+.code-num {
+	color:					rgb(248, 25, 25);
+}
+.code-quotes {
+	color:					rgb(125, 125, 125);
+}
+.code-kywd {
+	color:				rgb(85, 15, 98);
+}
+/* END VIEW_ARTICLE CONTENT */
+
+/**
+ * MEDIA QUERIES
+ * Must come after the default data or they are overriden by the browser
+ */
+@media screen and (max-width: 1024px) {
+	.draffft-title-container {
+		padding:			5px;
+	}
+	.draffft-title-wrapper h6 {
+		display:			none;
+	}
+	.article-wrapper h6 {
+		float:				none;
+	}
+	.page-wrapper {
+		width:				720px;
+	}
+	.code-wrapper li {
+		font-size:			10px;
+	}
+}
+@media screen and (min-width: 1024px) {
+	.draffft-title-container {
+		padding:			10px;
+	}
+	.draffft-title-wrapper h6, .article-wrapper h6 {
+		float:				none;
+	}
+	.page-wrapper {
+		width:				960px;
+	}
+	.code-wrapper li {
+		font-size:			12px;
+	}
+}
+@media screen and (min-width: 1280px) {
+	.draffft-title-container {
+		padding:			20px;
+	}
+	.draffft-title-wrapper h6, .article-wrapper h6 {
+		float:				right;
+	}
+	.page-wrapper {
+		width:				1200px;
+	}
+	.code-wrapper li {
+		font-size:			14px;
+	}
+}
+@media screen and (min-width: 1600px) {
+	.draffft-title-container {
+		padding:			30px 15px;
+	}
+	.draffft-title-wrapper h6, .article-wrapper h6 {
+		float:				right;
+	}
+	.page-wrapper {
+		width:				1500px;
+	}
+	.code-wrapper li {
+		font-size:			15px;
+	}
+}
+/* END MEDIA QUERIES */
