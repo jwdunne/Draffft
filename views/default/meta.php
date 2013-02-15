@@ -7,7 +7,7 @@
 		<link rel="stylesheet" href="<?=Uri::make('Core/assets/css/global.css', false);?>" />
 		<?=Application::stylesheet('css/default.css');?>
 		
-		<link rel="alternate" href="<?=Uri::make('feed/news.rss');?>" type="application/rss+xml" title="Site feed">
+		<link rel="alternate" href="<?=Uri::make('feed/recent.rss');?>" type="application/rss+xml" title="Site feed">
 		<link rel="shortcut icon" type="image/png" href="<?=Uri::make('Core/assets/images/favicon.png');?>" />
 		<script type="text/javascript">
 	    var base_url 	= "<?=Uri::make();?>",

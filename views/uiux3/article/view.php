@@ -1,10 +1,7 @@
-    <?php require_once $public->render('meta'); ?>
-		<?=$application->stylesheet();?>
-		<?php
-		if($article['allow_comments'] && $auth->is_authd() && $auth->can('draffft_post_comment')) :
-			echo $public->jscript($uri->create_uri('plugins', 'texteditors', 'souleedit', 'sf-edit.js'));
-		endif;
-		?>
+<?=$meta?>
+		<?php if ($article['allow_comments'] && Auth::is() && Auth::can('draffft_post_comment')) : ?>
+			<?=Uri::make('core/vendor/texteditors/souleedit/sf-edit.js');?>
+		<?php endif; ?>
 		<script>
 		$(d).ready(function() {
 			$('.sf-uix-button.show').click(function() {
@@ -23,7 +20,7 @@
 				 */
 				$('.article-comment-wrapper#' + cid).fadeOut('slow');
 			});
-			<?php if($article['allow_comments'] && $auth->is_authd() && $auth->can('draffft_post_comment')) : ?>
+			<?php if ($article['allow_comments'] && Auth::is() && Auth::can('draffft_post_comment')) : ?>
 			$('textarea').sfedit({
 				ajaxURL: 		'campr/ajax/thread_post_preview',
 				bgColorOrClass: 'sf-edit-uiux3-style',
@@ -38,7 +35,6 @@
 		</script>
 	</head>
 	<body>
-		<?php require_once $public->render('header');?>
 		<div class="page-wrapper article">
 			
 			<div class="draffft-title-wrapper">
@@ -46,19 +42,19 @@
 					<h1><?=$article['title'];?></h1>
 					<p><?=$article['description'];?></p>
 					<h6>
-						<span>Posted on <?=long_timestamp($article['date']);?> in <?=$article['cat_title'];?></span>
+						<span>Posted on <?=Time::stamp($article['date']);?> in <?=Category::get($article['category_id'])['cat_title'];?></span>
 					</h6>
 				</div>
 			</div>
 			
 			<div class="crumby-wrapper">
-    			<?=$uri->crumby();?>
+    			<?=$breadcrumbs;?>
     		</div>
-			<?php if($auth->can('draffft_edit_article')) : ?>
+			<?php if(Auth::can('draffft_edit_article')) : ?>
 			<div class="draffft-new-article-container clr">
 				<span>Author Controls</span>
 				<div class="draffft-new-button-container">
-					<a href="<?=$uri->create_uri('admincp', 'draffft', 'edit');?>" class="sf-uix-button color-blue">Edit Article</a>
+					<a href="<?=Uri::make("edit/{$article['id']}", true);?>" class="sf-uix-button color-blue">Edit Article</a>
 					<button class="sf-uix-button smaller close-admin-bar">&times;</button>
 				</div>
 			</div>
@@ -73,7 +69,7 @@
 				<?php if($article['show_about']) : ?>
 				<div class="about-author-meta">
 					<div class="article-author-image-border">
-						<img src="<?=$auth->user_avatar($author['username'])?>" alt="" />
+						<img src="<?=User::avatar($author['username'])?>" alt="" />
 					</div>
 					<div style="margin-left:80px;">
 						<p class="about-author-pgraph"><a href="#"><?=$author['first'] . ' ' . $author['last'];?></a> <?=$author['draffft_about'];?></p>
@@ -82,14 +78,13 @@
 				<?php endif; ?>
 			</div>
 			<div>
-				<a href="<?=$uri->create_uri('draffft')?>" class="sf-uix-button color-blue">Home</a>
+				<a href="<?=Uri::make('', true)?>" class="sf-uix-button color-blue">Home</a>
 				<a href="#top" class="sf-uix-button color-blue">Top</a>
 			</div>
-			<?php
-			require $application->render('comments');
+			<?=$comments;?>
 			
-			if ($article['allow_comments']) :
-				if ($auth->is_authd() && $auth->can('draffft_post_comment')) : ?>
+			<?php if ($article['allow_comments']) :
+				if (Auth::is() && Auth::can('draffft_post_comment')) : ?>
 				<textarea></textarea>
 				<?php endif; ?>
 			
@@ -97,4 +92,3 @@
 				<h2 class="article-comments-closed">Comments are closed for this article.</h2>
 			<?php endif; ?>
 		</div>
-<?php require_once $public->render('footer');

@@ -1,9 +1,9 @@
-<?php use Soule\Applications\Draffft\Models\Articles_Model as Articles;
-
-require_once $public->render('meta'); ?>
-		<?=$application->stylesheet();?>
+<?=$meta;?>
 		<script type="text/javascript">
 		$(d).ready(function() {
+
+			var $article = $('.article-wrapper');
+			
 			function pos_btns() {
 				$('.article-view-button-container').each(function() {
 	
@@ -15,7 +15,7 @@ require_once $public->render('meta'); ?>
 				});
 			}
 			
-			$('.article-wrapper').hover(function() {
+			$article.hover(function() {
 				link_title 	= $('.article-link', this).text();
 				date		= $('.article-header-date', this).text();
 				
@@ -43,88 +43,124 @@ require_once $public->render('meta'); ?>
 			}, function() {
 				$('.sprite-hover', this).stop(true, true).fadeOut('slow');
 			});
+
+		    $('.do-grid-view').click(function() {
+			    
+			    $article.animate({
+				    'width': '48%'
+				});
+				$('.article-wrapper:even').css({
+					'margin': '0 2% 0 0',
+					'float': 'left',
+					'min-height': '225px'
+				});
+				$('.article-wrapper:odd').css({
+					'margin': '0 0 0 2%',
+				    'float': 'right',
+					'min-height': '225px'
+				});
+			});
+
+			$('.do-list-view').click(function() {
+			    $article.animate({
+				    'width': '100%'
+				}).css({
+					'margin': '0px 0px 15px',
+					'float': 'none',
+					'min-height': 'initial'
+				});
+			});
 			
 		});
 		</script>
+		<style>
+		.do-grid-view, .do-list-view {
+            cursor:        pointer;
+            margin:        0px 4px;
+            color:         rgb(95, 95, 95);
+            font-size:     1.1em;
+		}
+		</style>
 	</head>
 	<body>
-	<?php require_once $public->render('header'); ?>
 		<div class="page-wrapper articles">
 			<div class="draffft-title-wrapper">
 				<div class="draffft-title-container clr">
-					<h1><?=Settings::read('draffft_name', 'Draffft')?></h1>
-					<p><?=Settings::read('draffft_slogan', 'A blogging app built for Soule');?></p>
+					<h1><?=Application::info('public_name')?></h1>
+					<p><?=Application::info('tagline');?></p>
 				</div>
 			</div>
 			
 			<div class="crumby-wrapper">
-    			<?=$uri->crumby();?>
+    			<?=$breadcrumbs;?>
+    		</div>
+    		<div style="display:inline-block;">
+    		    <i class="icon-th-large do-grid-view" title="grid view"></i>
+    		    <i class="icon-reorder do-list-view" title="list view"></i>
     		</div>
     		<div class="paginations fr">
-				<?=$paginate->display_pages();?>
+				<?=Paginations::display();?>
 			</div>
 			
-			<?php if ($auth->can('draffft_post_article')) : ?>
+			<?php if (Auth::can('draffft_post_article')) : ?>
 			<div class="draffft-new-article-container clr">
 				<span>Author Controls</span>
 				<div class="draffft-new-button-container">
-					<a href="<?=$uri->create_uri($uri->get_slug(0), 'new');?>" class="sf-uix-button color-android">New Article</a>
-					<a href="<?=$uri->create_uri('admincp', 'draffft');?>" class="sf-uix-button color-blue">Edit Articles</a>
+					<a href="<?=Uri::make('new', true);?>" class="sf-uix-button color-android">New Article</a>
+					<a href="<?=Uri::make('edit', true);?>" class="sf-uix-button color-blue">Edit Articles</a>
 					<button class="sf-uix-button smaller close-admin-bar icon-remove-sign"></button>
 				</div>
 			</div>
 			<?php endif; ?>
 		    
 		    <div class="page-container">
-			    <?php
-				if(Articles::total_articles() !== 0) :
-					while($article 	= $db->fassoc($articles)) :
-						$author		= $auth->get_user((int)$article['user_id']);
-				?>
+			    <?php if(Articles::total() >= 1) : ?>
+				    <?php foreach (Articles::get() as $article) : ?>
+				        <?php $author = User::find($article['user_id']);?>
 				<div class="article-wrapper">
 					<div class="article-container">
 						<div class="article-header-container clr">
-							<i class="article-header-icon icon-pencil"></i>
+							<i class="article-header-icon icon-book"></i>
 							<h2 class="article-header-title">
-								<a class="article-link" href="<?=$uri->create_uri($uri->get_slug(0), $article['slug']);?>" data-desc="<?=$article['description']?>"><?=$article['title'];?></a>
+								<a class="article-link" href="<?=Article::link($article['id'], $article['slug']);?>" data-desc="<?=$article['description']?>"><?=$article['title'];?></a>
 							</h2>
-							<h4 class="article-header-date"><?=(time_since($article['date']));?></h4>
+							<h4 class="article-header-date"><?=Time::since($article['date']);?></h4>
 							<i class="article-header-time-icon icon-time"></i>
 						</div>
 						<div class="article-content-wrapper">
 							<div class="article-content-container">
-								<?=strip_tags(substr($article['body'], 0, 2000), '<p><h1><h2><h3><h4><h5><h6><a><ol><ul><li><br>');?>[ . . . ]
+								<?=Article::preview($article['body'], 500);?>
 							</div>
 							<div class="article-content-hovered-container">
 								<div class="article-quick-actions fr">
-									<a href="<?=$uri->create_uri($uri->get_slug(0), 'like', $article['slug']);?>">
+									<a href="<?=Uri::make("like/{$article['id']}-{$article['slug']}", true);?>">
 										<i class="icon-heart" ></i>
 										<?php // XXX ?>
-										<span class="sprite-hover"><?=Articles::article_likes($article['id']);?></span>
+										<span class="sprite-hover"><?=Likes::count($article['id']);?></span>
 									</a>
-									<a href="<?=$uri->create_uri($uri->get_slug(0), $article['slug']);?>#comments">
+									<a href="<?=Article::link($article['id'], $article['slug']);?>#comments">
 										<i class="icon-comments"></i>
-										<span class="sprite-hover"><?=Articles::article_comment_count((int)$article['id']);?></span>
+										<span class="sprite-hover"><?=Comments::count($article['id']);?></span>
 									</a>
 								</div>
 								<div class="article-view-button-container">
-									<div class="article-view-button clr" data-url="<?=$uri->create_uri($uri->get_slug(0), $article['slug']);?>">
+									<div class="article-view-button clr" data-url="<?=Article::link($article['id'], $article['slug']);?>">
 										<i class="icon-eye-open"></i>
 										<span>Continue Reading</span>
 									</div>
 								</div>
 								<div class="article-author-container">
 									<div class="article-author-image-border">
-										<img src="<?=$auth->user_avatar($author['username'])?>" alt="" />
+										<img src="<?=User::avatar($author['username'])?>" alt="" />
 									</div>
-									<a href="<?=$uri->create_uri('user', $author['id'] . '-' . $author['username']);?>"><?=$author['first'] . ' ' . $author['last'];?></a>
+									<a href="<?=Uri::make("user/{$author['id']}-{$author['username']}");?>"><?=$author['first'] . ' ' . $author['last'];?></a>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 				<?php
-					endwhile;
+					endforeach;
 				else : ?>
 				<div class="article-wrapper">
 					<div class="article-container">
@@ -146,10 +182,9 @@ require_once $public->render('meta'); ?>
 				<?php endif;?>
 				
 				<div class="paginations centered">
-    				<?=$paginate->display_pages();?>
+    				<?=Paginations::display();?>
     			</div>
     			
 			</div>
 			
 		</div>
-<?php require_once $public->render('footer');

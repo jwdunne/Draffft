@@ -15,18 +15,18 @@
  */
 define('DT_PRE',         DB_PRE  . 'draffft_');
 define('DT_CONFIG',      DT_BASE . 'config' . DS);
-define('DT_CONTROLLERS', DT_BASE . 'controllers' . DS);
-define('DT_MODELS', 	 DT_BASE . DS);
+define('DT_MODELS', 	 DT_BASE . 'models' . DS);
+
+/*
+ * Database Tables
+ */
+define('DT_ARTICLES_TABLE',   DT_PRE . 'articles');
+define('DT_CATEGORIES_TABLE', DT_PRE . 'categories');
+define('DT_TAGS_TABLE',       DT_PRE . 'tags');
+define('DT_COMMENTS_TABLE',   DT_PRE . 'comments');
+define('DT_LIKES_TABLE',      DT_PRE . 'likes');
+define('DT_PINGBACK_TABLE',   DT_PRE . 'pingback');
 
 Soule\IO\Autoloader::alias(DT_CONFIG);
-Soule\IO\Autoloader::directory([DT_BASE, DT_MODELS, DT_CONTROLLERS]);
-
-$fi = new FilesystemIterator(DT_CONTROLLERS, FilesystemIterator::SKIP_DOTS);
-foreach ($fi as $file)
-{
-	if ($file->isFile() && $file->isReadable() && $file->getExtension() == 'php')
-	{
-		require $file->getPathname();
-	}
-}
+Soule\IO\Autoloader::directory(DT_BASE, DT_MODELS);
 define('DT_CONFIGED', true);

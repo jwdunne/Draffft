@@ -1,0 +1,7 @@
+# Zend Studio project files
+.buildpath
+.project
+.settings
+
+views/*
+!views/default

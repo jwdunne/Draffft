@@ -12,10 +12,8 @@ A simple lightweight blog app built for SCMF
 
 ## Installation
 For the time being you just need to run an SQL file through your DB to add
-all the proper settings and tables. There are two ways of editing the settings,
-open the SQL file and edit the settings (outlining later), or use cli/RDBMS
-
-**Note** Setup files are not being released until SCMF hits RC1 (1.2.3)
+all the proper settings and tables.
+All you need to do is run the SQL file `config/drafft-db-xxx.sql` into the Soule DB.
 
 ## License
 Released under APL v2, See LICENSE for more. Basically I don't really care as long as you give back improvements.

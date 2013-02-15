@@ -59,8 +59,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 .draffft-title-wrapper h1 {
 	margin:					0px;
-	font-size:				36px;
-	line-height:			36px;
+	font-size:				3em;
+	line-height:			1em;
 	letter-spacing:			-1px;
 	display:				inline-block;
 	text-shadow:			0px 1px 0px rgba(255, 255, 255, 0.75);
@@ -68,7 +68,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .draffft-title-wrapper p {
 	color:					rgb(125, 125, 125);
-	font-size:				16px;
+	font-size:				1.2em;
 	font-weight:			100;
 	text-shadow: 			0px 1px 0px rgba(255, 255, 255, 0.75);
 	margin:					5px 0px 0px;
@@ -115,7 +115,7 @@ h1, h2, h3, h4, h5, h6 {
 /* END AUTHOR BAR */
 /**
  * 24px icons, but are 30px due to layer effects..
- */
+ *
 .dsprite, .dsprite32 {
 	background:				rgba(0, 0, 0, 0) url(../images/draffft.png) 0px 0px no-repeat;
 	height:					30px;
@@ -149,15 +149,9 @@ h1, h2, h3, h4, h5, h6 {
 .dsprite.bookmark {
 	background-position:	-66px -254px;
 }
-/**
- * forgot about this one...
- */
 .dsprite.clock {
 	background-position:	-66px -287px;
 }
-/**
- * 32px icons
- */
 .dsprite32 {
 	height:					34px;
 	width:					34px;
@@ -189,20 +183,17 @@ h1, h2, h3, h4, h5, h6 {
 .dsprite32.bookmark {
 	background-position:	-15px -523px;
 }
-/**
- * forgot about this one...
- */
 .dsprite32.clock {
 	background-position:	-16px -287px;
 }
-
+*/
 
 
 /* ARTICLES(index) CONTENT */
 .article-wrapper {
 	margin:					0px 0px 15px;
 }
-.article-wrapper:hover {
+.article-container:hover {
 	transition:				all 0.2s linear;
 	-webkit-transition:		all 0.2s linear;
 	-moz-transition:		all 0.2s linear;
@@ -211,7 +202,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .article-wrapper:hover .article-header-container, .article-wrapper:hover .article-content-wrapper {
 	border-color:			rgb(175, 175, 175);
-} 
+}
 .article-container {
 	position:				relative;
 }
@@ -461,7 +452,7 @@ h1, h2, h3, h4, h5, h6 {
 .page-wrapper.article .draffft-title-container {
 	background:				rgb(255, 255, 255);
 	border:					1px solid rgb(220, 220, 220);
-	padding:				40px 0px 10px;
+	padding:				10px 0px;
 }
 .page-wrapper.article .draffft-title-container p {
 	font-style:				italic;
@@ -489,21 +480,12 @@ h1, h2, h3, h4, h5, h6 {
 	border-bottom:			1px dotted rgb(65, 135, 210);
 }
 
-.pgraph-wrapper ol,
-.pgraph-wrapper ul {
-	list-style:				none;
-}
 .pgraph-wrapper ul ul,
 .pgraph-wrapper ul ol,
 .pgraph-wrapper ol ol,
 .pgraph-wrapper ol ul {
 	margin-bottom: 			0px;
-}
-.pgraph-wrapper ol.numerical {
-	list-style:				decimal outside;
-}
-.pgraph-wrapper ul {
-	list-style:				disc;
+    padding:                0px 15px;
 }
 
 
