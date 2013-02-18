@@ -9,15 +9,15 @@
                     </li>
                     <ol class="links clr">
                         <li>
-                            <a href="">Contact</a>
+                            <a href="<?=Application::link('contact-us');?>">Contact</a>
                             <i class="icon-chevron-right"></i>
                         </li>
                         <li>
-                            <a href="">Privacy</a>
+                            <a href="<?=Application::link('privacy');?>">Privacy</a>
                             <i class="icon-chevron-right"></i>
                         </li>
                         <li>
-                            <a href="">Terms of Service</a>
+                            <a href="<?=Application::link('tos');?>">Terms of Service</a>
                         </li>
                     </ol>
                 </ol>

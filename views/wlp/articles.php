@@ -1,9 +1,9 @@
-<?=($meta);?>
+<?=$meta;?>
 <div class="body-wrapper clr">
     <section class="grid-75">
     <?php if (Article::total() >= 1) : ?>
-        <?php for ($i = Article::total(); $i > 0; $i--) : ?>
-        <?php Article::get($i);?>
+        <?php foreach (Article::all() as $article) : ?>
+        <?php Article::get($article['id']); // not required, but to make things easier! ?>
         <article class="article-overview-wrapper clr">
             <header class="article-title clr">
                 <h2><a href="<?=Article::link();?>"><?=Article::title();?></a></h2>
@@ -13,16 +13,16 @@
                 </div>
             </header>
             
-            <?php if (Article::image() !== '') : ?>
+            <?php if (Article::image() != '') : ?>
             <div class="image-wrapper">
                 <div class="image-container">
-                    <img src="<?=Application::asset_url(Article::image());?>" alt="" />
+                    <img src="<?=Article::image();?>" alt="" />
                 </div>
             </div>
             <?php endif; ?>
             
             <div class="article-copy-preview clr">
-                <?=Article::preview(500, "<br /><a href='" . Article::link() . "'>Continue Reading</a>");?>
+                <?=Article::preview(500, "<br /><a href='" . Article::link() . "'>" . __('common.continue') . "</a>");?>
             </div>
             
             <footer class="clr">
@@ -33,7 +33,7 @@
             </footer>
             
         </article>
-        <?php endfor; ?>
+        <?php endforeach; ?>
     <?php else : ?>
         <article class="article-overview-wrapper clr">
             <header class="article-title clr">
@@ -44,14 +44,13 @@
             </div>
         </article>
     <?php endif; ?>
+    <div class="paginations">
+        <?=Paginations::display();?>
+    </div>
     </section>
     
     <section class="grid-25">
-    <?php if (Auth::can('user')) : ?>
-        <?=View::make('sidebar/feed');?>
-    <?php else : ?>
-        <?=View::make('sidebar/login');?>
-    <?php endif; ?>
+        <?=View::make('sidebar/sidebar');?>
     </section>
 </div>
-<?=$footer;?>
+<?=View::make('footer');?>

@@ -36,10 +36,11 @@ Route::get('/', function() {
  */
 Route::get(['(:num)', 'articles/(:num)', 'home/(:num)'], function($id) {
     
-    $article = Article::get($id);
+    Article::get($id);
+    $article = Article::id();
     
     if ($article !== null && $article !== false) {
-        Response::redirect(Application::link('view', "{$id}-{$article['slug']}"));
+        Response::redirect(Article::link());
         
     } else {
         Response::redirect(Application::link('home', 'page', 1));
@@ -52,11 +53,13 @@ Route::get(['(:num)', 'articles/(:num)', 'home/(:num)'], function($id) {
  */
 Route::get(['articles', 'home', 'aticles/page/(:num)', 'home/page/(:num)'], function($page = 1) {
     
-    Paginations::make(Article::total(), $page, Settings::read('draffft_articles_per_page'));
+    Paginations::make(
+        Article::total(),
+        $page,
+        Settings::read('draffft_articles_per_page'));
     
-    return View::make('articles', ['breadcrumbs' => Breadcrumbs::make()])
-        ->add('meta',   'meta', ['title' => ucwords(Application::info('public_name'))])
-        ->add('footer', 'footer');
+    return View::make('articles')
+        ->add('meta',   'meta', ['title' => ucwords(Application::info('public_name'))]);
 });
 
 /*
@@ -69,27 +72,33 @@ Route::get(['view/(:num)-(:any)'], function($id, $title) {
     
     Article::get($id);
     
-    $vars['author']  = Article::author();
-    $vars['breadcrumbs'] = Breadcrumbs::make([Article::title() => Uri::current()]);
-    
-    return View::make('article/view', $vars)
-        ->add('meta', 'meta', ['title' => Article::title() . ' | ' . ucwords(Application::info('public_name')), 'meta_vars' => ['<link rel="pingback" href="' . Application::link('xmlrpc') . '" />']])
-        ->add('comments', 'article/comments');
-
+    return View::make('article/view')
+        ->add('meta', 'meta', [
+            'title'     => Article::title() . ' | ' . ucwords(Application::info('public_name')),
+            'meta_vars' => ['<link rel="pingback" href="' . Application::link('xmlrpc') . '" />']
+        ]);
 });
 
 /*
  * Post the comment
  */
 Route::post('comment', function() {
-    Comments::insert($_POST);
+    $post = array_merge($_POST, [
+        'id'        => null,
+        'user_id'   => User::id(),
+        'date'      => Date::create(),
+        'comment'   => Parser::parse_style($_POST['comment'], true)
+    ]);
+    
+    Comments::create($post);
+    return Response::redirect(Application::link($post['article_id']));
 });
 
 /*
  * Route for reply previews.
  */
-Route::get('comment/ajax', function() {
-    echo Parser::parse_style($_GET['body'], true);
+Route::post('comment/ajax', function() {
+    return Parser::parse_style($_POST['body'], true);
 });
 
 /*
@@ -111,7 +120,9 @@ Route::get('category/(:num)-(:any)', function($id, $name) {
 /*
  * View articles tagged by X
  */
-Route::get('tagged/(:any)', function($tag) {});
+Route::get('tagged/(:any)', function($tag) {
+
+});
 
 /*
  * Create a new Article
@@ -124,7 +135,6 @@ Route::get('new', ['before' => 'author', 'do' => function() {
 }]);
 
 Route::post('new', function() {
-    
     return Response::redirect(Application::link(Article::insert($_POST)));
     
 });
@@ -135,6 +145,7 @@ Route::post('new', function() {
 Route::get('edit/(:num)-(:any)', ['before' => 'edit', 'do' => function($id, $title) {
     
     $title = "Editing " . Strings::title($title);
+    Article::get($id);
     
     return View::make('article/edit')
         ->add('meta', 'meta', ['title' => $title]);
@@ -145,21 +156,14 @@ Route::post('edit', ['before' => 'edit', 'do' => function() {
     
     Article::update($_POST);
     
+    return Response::redirect(Application::link($_POST['id']));
+    
 }]);
 
 /*
  * Pingbacks/Trackbacks
  * @ignore
  */
-Route::get(['pingback', 'trackback', 'xmlrpc'], function() {
-
-    Response::header('Content-Type', 'text/xml; charset=UTF-8');
-    Response::header('X-Pingback', Application::link('xmlrpc'));
-    
-    return '<h1>POST is the only supported method for the XMLRPC server</h1>'; //Pingback::unsupported();
-    
-});
-
 Route::post(['pingback', 'trackback', 'xmlrpc'], function() {
     
     $source = 'http://jameswdunne.com/blog';
@@ -227,6 +231,10 @@ Route::get('logout', function() {
     return Response::redirect(Application::link());
 });
 
+Route::get(['pingback', 'trackback', 'xmlrpc', 'comment', 'comment/ajax'], function() {
+    return Response::redirect(Application::link());
+});
+
 /*
  * Catch all
  */
@@ -246,7 +254,7 @@ Route::filter('edit', function() {
 });
 
 Route::filter('author', function() {
-    if (!Auth::can('draffft_create_article')) {
+    if (!Auth::can('draffft_post_article')) {
         return Response::redirect(Application::link('#login'));
     }
 });

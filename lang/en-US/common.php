@@ -2,7 +2,7 @@
 /**
  * L10N for Draffft
  *
- * @var     array        $t the keys that will be searched for to return translated
+ * @var     array        the keys that will be searched for to return translated
  */
 return [
 
@@ -15,10 +15,19 @@ return [
     /* Globals */
     'empty-blog-title'  => 'Oh no, this blog is empty...',
     'empty-blog-desc'   => 'This could be an error, but we cannot find anything here.',
-    'continue-reading'  => 'Continue Reading',
-    'likes'             => 'likes',
+    'continue'          => 'Continue Reading',
     'no-comments'       => 'No comments',
-    'x-comments'        => '{1} comments',
+    
+    'new-category'      => 'New Category',
+    'add-image'         => 'Add an image',
+    
+    'category-x-empty'  => 'The category {1} return no results.',
+    'category-all-x'    => 'All {1}',
+    'comments-closed'   => 'Comments are closed',
+    'comments-guest'    => 'You must login to comment.',
+    
+    'editing-x'         => 'Editing "{1}"',
+    
     'posted-x'          => 'Posted <time datetime="{1}" pubdate>{2}</time>',
     'posted-by'         => 'Posted by',
     'filed-in'          => 'Filed in',

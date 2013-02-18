@@ -70,7 +70,10 @@ ALTER TABLE `sf_usergroups`
     ADD `draffft_post_article`      tinyint(4) unsigned NOT NULL DEFAULT '0',
     ADD `draffft_delete_article`    tinyint(4) unsigned DEFAULT '0',
     ADD `draffft_edit_article`      tinyint(4) unsigned NOT NULL DEFAULT '0';
-    
+
+INSERT INTO  `sf_usergroups` (`id`, `name`, `is_admin`, `is_mod`, `draffft_post_comment`, `draffft_delete_comment`, `draffft_post_article`, `draffft_delete_article`, `draffft_edit_article`)
+VALUES (NULL, 'Author', '0', '1', '1', '0', '1', '0', '1');
+
 ALTER TABLE `sf_users`
     ADD `draffft_about`     mediumtext COLLATE utf8_bin NOT NULL;
 

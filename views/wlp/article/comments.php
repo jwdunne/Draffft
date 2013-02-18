@@ -1,22 +1,26 @@
 <?php if (Comments::open() && Auth::can('draffft_post_comment')) : ?>
-    <form action="<?=Application::link('post');?>" method="post">
+    <script src="<?=Uri::make('core', 'Vendor', 'souleedit', 'sf-edit.js');?>"></script>
+    <form action="<?=Application::link('comment');?>" method="post">
         <input type="hidden" value="<?=Article::id();?>" name="article_id" />
-        <input type="hidden" name="in_reply" value="0" />
+        <input type="hidden" name="reply_to" value="0" />
         <textarea name="comment"></textarea>
+        <input type="submit" value="Comment" />
     </form>
+<?php elseif (!Comments::open()) : ?>
+    <h3 class="comments-status"><?=__('common.comments-closed');?></h3>
 <?php else : ?>
-    <h3 class="comments-status"><?=Auth::can('user') ? 'Comments are closed' : 'You must be logged in to comment';?></h3>
+    <h3 class="comments-status"><?=__('common.comments-guest');?></h3>
 <?php endif; ?>
 <?php foreach (Comments::get_all() as $comment) : ?>
     <?=Comments::show($comment['id']);?>
 <?php endforeach; ?>
 <script>
 $(d).ready(function() {
-
+    <?php if (Comments::open() && Auth::can('user')) : ?>
     $('.article-comments-container').dblclick(function() {
         var t        = $(this),
             color    = '2px solid rgb(125, 125, 125)',
-            hold     = $('input[name="in_reply"]'),
+            hold     = $('input[name="reply_to"]'),
             reply_to = t.attr('id'),
             buffer   = hold.val();
             
@@ -29,7 +33,20 @@ $(d).ready(function() {
                 hold.val(reply_to);
                 t.css('border-left', '5px solid rgb(220, 25, 25)');
             }
+    }).attr('title', 'Double click me to reply to me!');
+    
+    $('textarea').sfedit({
+        template:   '<h3>You are using the <a target="_blank" title="[I open in a new tab!] Learn it real quick" href="http://daringfireball.net/projects/markdown/syntax">Markdown</a> editor</h3>',
+        ajaxUrl:    "<?=Application::link('comment', 'ajax');?>"
+    }).scmf_scroll({
+        height: 		'150px',
+	    wrapperClass: 	'sf-uix-scroll-wrapper',
+	    rbwrapClass: 	'sf-uix-scroll-rb-wrapper nib-only',
+	    railClass: 		'sf-uix-scroll-rail nib-only',
+	    barClass: 		'sf-uix-scroll-bar nib-only'
     });
+    
+    <?php endif; ?>
 
     $('.in-reply').each(function(i, el) {
         $(el).css({

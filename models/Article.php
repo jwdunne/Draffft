@@ -16,9 +16,11 @@ namespace apps\draffft\models;
     
 use Soule\Application\Application,
     Soule\Application\Paginations,
+    Soule\Application\Settings,
     Soule\Database\Modules\Query,
     Soule\HttpKernel\Uri,
     Soule\IO\Strings,
+    Soule\Localization\Date,
     Soule\Parser\Parser,
     Soule\User\User;
 
@@ -39,7 +41,7 @@ class Article
     
     public static function total()
     {
-        return count(static::all());
+        return Query::table(static::$table)->count();
     }
     
     public static function get($id)
@@ -69,11 +71,14 @@ class Article
     
     public static function body()
     {
-        return static::$article['body'];
+        return preg_replace('#\|\|\|\|PREVIEW\|\|\|\|#i', '', static::$article['body']);
     }
     
     public static function image()
     {
+        if (stripos(Settings::read('base_url'), static::$article['image']) !== false) {
+            return Application::asset_url(static::$article['image']);
+        }
         return static::$article['image'];
     }
     
@@ -95,9 +100,31 @@ class Article
     
     public static function preview($limit = 1200, $ellipsis = "[ . . . ]")
     {
-        $preview = (stripos(static::body(), '||||PREVIEW||||') ? substr(static::body(), 0, stripos(static::body(), '||||PREVIEW||||')) : substr(static::body(), 0, $limit));
-        $preview = preg_replace('#\|\|\|\|PREVIEW\|\|\|\|#i', '', $preview);
-        return strip_tags($preview, '<p><h1><h2><h3><h4><h5><h6><br><em><strong><b><span><code><pre><ol><ul><li>') . (strlen(static::body()) > $limit ? $ellipsis : '');
+        $body = static::$article['body'];
+        if (stripos($body, '||||PREVIEW||||') !== false) {
+            $body = substr($body, 0, stripos($body, '||||PREVIEW||||'));
+        } else {
+            $body = substr($body, 0, $limit);
+        }
+        
+        $body = preg_replace('#\|\|\|\|PREVIEW\|\|\|\|#i', '', $body);
+        return $body . (strlen($body) > $limit ? $ellipsis : '');
+    }
+    
+    public static function next()
+    {
+        $next = static::where('id', static::id() + 1)->fetch();
+        if ($next !== null) {
+            return $next;
+        }
+    }
+    
+    public static function previous()
+    {
+        $prev = static::where('id', static::id() - 1)->fetch();
+        if ($prev !== null) {
+            return $prev;
+        }
     }
     
     public static function likes_count()
@@ -120,20 +147,28 @@ class Article
         return false;
     }
     
+    public static function show_about()
+    {
+        return (bool)static::$article['show_about'];
+    }
+    
+    public static function category_id()
+    {
+        return (int)static::$article['category_id'];
+    }
+    
     public static function insert($post)
     {
         if (!preg_match("#[0-9]#", $_POST['category_id'])) {
             $_POST['category_id'] = Category::create(['id' => null, 'title' => $_POST['category_id']]);
         }
-        
         return Query::table(static::$table)->insert_get_id([
             'id'             => null,
             'user_id'        => User::info('id'),
-            'date'           => time(),
+            'date'           => Date::create(),
             'title'          => $post['title'],
             'description'    => $post['description'],
             'body'           => Parser::parse_style($post['body'], true),
-            'slug'           => '',
             'show_about'     => isset($post['show_about']) ? 1 : 0,
             'allow_comments' => isset($post['allow_comments']) ? 1 : 0,
             'category_id'    => $post['category_id'],

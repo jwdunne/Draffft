@@ -1,8 +1,8 @@
-<?php if (Pingback::get($article['id'])) : ?>
+<?php if (Pingback::get(Article::id())) : ?>
 <div class="feed-wrapper">
     <h2>Pingbacks</h2>
     <ul class="recent-things">
-    <?php foreach (Pingback::get($article['id']) as $ping) : ?>
+    <?php foreach (Pingback::get(Article::id()) as $ping) : ?>
         <li>
             <h4>
                 <a href="<?=$ping['uri']?>"><?=$ping['author'];?></a> <span><?=Time::since($ping['date']);?></span>

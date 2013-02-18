@@ -41,6 +41,38 @@
     -moz-box-shadow:        @arguments;
 }
 
+.big-button, input[type='submit'] {
+    cursor:                 pointer;
+    background:             @text-color;
+    border:                 1px solid rgba(0, 0, 0, 0);
+    height:                 42px;
+    min-width:              100px;
+    color:                  rgb(255, 255, 255);
+    font-weight:            200;
+    font-size:              22px;
+    letter-spacing:         1px;
+    text-align:             center;
+    font-family:            @font-style;
+    margin:                 0px;
+    
+    &:hover {
+        border:             1px solid darken(@text-color, 15%);
+    }
+    
+    &:active {
+        box-shadow:         inset 0px 1px 3px rgba(0, 0, 0, 0.5);
+    }
+    
+}
+
+/*
+* {
+    box-sizing:             border-box;
+    -webkit-box-sizing:     border-box;
+    -moz-box-sizing:        border-box;
+}
+*/
+
 .txt_input {
     font-family:            @font-style;
     border-width:           0px;
@@ -71,6 +103,7 @@ pre, code, .code {
 }
 
 h1, h2, h3, h4, h5, h6 {
+    color:                      @text-color;
     font-weight:                200;
 }
 
@@ -157,6 +190,10 @@ nav {
                 margin:         0px 4px 0px 0px;
             }
         }
+        
+        .paginations {
+            margin:             0px 25px;
+        }
     
         article.article-overview-wrapper {
             margin:             0px 25px;
@@ -199,24 +236,29 @@ nav {
                 
             }
             
-            .article-copy-preview {
+            .article-copy-preview, .sfe-editor-preview-text {
                 
                 ul, ol {
                     margin:     1em;
                     list-style: inside disc;
                 }
                 
-                ol {
-                    list-style-type: decimal;
+                ol { list-style-type: decimal; }
+                
+                h1, h2, h3, h4, h5, h6 {
+                    margin:     10px 0px;
                 }
                 
-                h2 {
-                    font-size:  24px;
-                    margin:     10px 0px;
-                }
-                p {
-                    margin:     10px 0px;
-                }
+                h1 { font-size: 28px; }
+                h2 { font-size: 26px; }
+                h3 { font-size: 24px; }
+                h4 { font-size: 22px; }
+                h5 { font-size: 20px; }
+                h6 { font-size: 18px; }
+                
+                p { margin:     10px 0px; }
+                
+                a { text-decoration: underline; }
                 
             }
             
@@ -271,25 +313,7 @@ nav {
             }
             
             input[type="submit"] {
-                cursor:         pointer;
-                background:     @text-color;
-                border:         1px solid rgba(0, 0, 0, 0);
-                height:         42px;
-                width:          100px;
-                color:          rgb(255, 255, 255);
-                font-weight:    100;
-                font-size:      22px;
-                letter-spacing: 1px;
-                font-family:    @font-style;
-                
-                &:hover {
-                    border:     1px solid darken(@text-color, 15%);
-                }
-                
-                &:active {
-                    box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.5);
-                }
-                
+                .big-button;
             }
             
             input.txt_input {
@@ -299,7 +323,7 @@ nav {
             }
             
             input.double {
-                width:          45%;
+                width:      138px;
                 display:        inline-block;
             }
             
@@ -399,7 +423,7 @@ nav {
             .comments-status {
                 text-align:     center;
                 font-size:      2em;
-                color:          @text-color-dark;
+                margin-bottom:  20px;
             }
             
             .article-comments-container {
@@ -443,9 +467,11 @@ nav {
                 h4.comment-author-name, h5.comment-time {
                     margin:     5px 0px;
                 }
-                h4.comment-author-name a {
-                    font-size:  1.5em;
-                    color:      @text-color;
+                h4.comment-author-name {
+                    span, a {
+                        font-size:  1.5em;
+                        color:      @text-color;
+                    }
                 }
                 
                 .comment-author-comment {
@@ -459,6 +485,31 @@ nav {
         
     }
     
+}
+
+.blocky-form{
+    width:                  100%;
+    padding:                0px 25px;
+    
+    input:not([type="submit"]), textarea {
+        display:            block;
+        height:             75px;
+        border:             1px solid rgb(232,232,232);
+        width:              750px;
+        background:         rgb(255,255,255);
+        color:              rgb(25,25,125);
+        font-weight:        200;
+        font-size:          2em;
+        margin:             25px 0px;
+        padding:            0px 15px;
+        font-family:        'Source Sans Pro','Ubuntu Condensed','Ubuntu Light',Tahoma,Arial,sans-serif;
+    }
+    
+    textarea {
+        overflow:           hidden;
+        padding:            15px;
+        width:              780px;
+    }
 }
 
 footer.site-footer {
@@ -580,23 +631,52 @@ footer.site-footer {
         background:             @text-color;
         color:                  rgb(255, 255, 255);
         font-family:            @font-style;
-        font-weight:            400;
-        font-size:              2em;
+        font-weight:            200;
         border-width:           0px;
         padding:                5px 15px;
         margin:                 10px 0px;
+        cursor:                 pointer;
+    }
+    
+    .upload-wrapper {
+        background:             lighten(@color-grey, 5%);
+        padding:                10px;
+        margin:                 10px 0px 0px;
     }
 }
 
-/**
+/*
+ * Paginations Overrides
+ */
+.paginations {
+    
+    .pagination {
+        &.enabled {
+            color:          @text-color;
+        }
+        
+        &.disabled {
+            color:          @color-grey;
+            
+            &.current {
+                color:      @text-color-dark;
+            }
+        }
+    }
+    
+}
+
+/*
  * SF-Edit overrides
  */
 .sfe-wrapper-ui-color {
+    padding:                0px 0px 1px;
     font-family:            @font-style !important;
     background:             lighten(@color-grey, 5%) !important;
     border-radius:          0px !important;
     border:                 0px !important;
     box-shadow:             none !important;
+    margin-bottom:          15px;
     
     .sfe-controls {
         padding:            10px;

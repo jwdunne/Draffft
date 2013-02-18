@@ -26,6 +26,9 @@ class Comments extends Model
     
     private static $threaded_count = 0;
     
+    /**
+     * @ignore
+     */
     private static $actions = [
         'reply'  => ['#', 'icon-share'],
         'flag'   => ['#', 'icon-flag'],
@@ -57,11 +60,17 @@ class Comments extends Model
         return (int)Query::table(static::$table)->where('article_id', $article_id)->count();
     }
     
+    /**
+     * Note: 'in_reply': 0; is required for threading!
+     */
     public static function get_all()
     {
         return Query::table(static::$table)->where('article_id', Article::id())->where('reply_to', 0)->get('id');
     }
     
+    /**
+     * @ignore
+     */
     private static function actions($comment_id, $user_id, $commenter_user_id)
     {
         $buttons = [];
@@ -107,15 +116,15 @@ class Comments extends Model
             </div>
             <div class="article-comment-data">
                 <h4 class="comment-author-name">
-                    <a href="mailto:<?=$commenter['email'];?>"><?="{$commenter['first']} {$commenter['last']} ({$commenter['username']})";?></a>
+                    <?php //<a href="mailto:<?=$commenter['email'];" title="Email me!"><?="{$commenter['first']} {$commenter['last']} ({$commenter['username']})";</a> ?>
+                    <span><?="{$commenter['first']} {$commenter['last']} ({$commenter['username']})";?></span>
                 </h4>
                 <h5 class="comment-time"><?=Time::stamp($comment['date'], 'short');?> (<em><?=Time::since($comment['date']);?></em>)</h5>
                 <div class="comment-author-comment"><?=$comment['comment'];?></div>
             </div>
         </div>
         <?php
-        if (static::is_threaded($comment['id']))
-        {
+        if (static::is_threaded($comment['id'])) {
             static::$threaded_count++;
             static::show(static::get_threaded($comment['id']));
         }

@@ -16,7 +16,18 @@ Route::get('contact-us', function() {
 });
 
 Route::post('contact-us', function() {
-    
+   
+   Query::table('contact_us', DB_PRE)->insert($_POST);
     
     return Response::redirect(Application::link());
+});
+
+Route::get('privacy', function() {
+    return View::make('privacy')
+        ->add('meta', 'meta', ['title' => 'WeLoveProgramming.org\'s Privacy Policy']);
+});
+
+Route::get(['tos', 'terms'], function() {
+    return View::make('tos')
+        ->add('meta', 'meta', ['title' => 'WeLoveProgramming\'s Terms of Service']);
 });

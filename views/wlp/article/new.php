@@ -26,10 +26,20 @@
                     <?php endforeach; ?>
                         <option value="0">New Category</option>
                     </select>
+                    <div class="note">
+                        <h4>Authoring Tip:</h4>
+                        <p>For the front page previews, add "||||PREVIEW||||" (without quotes) to cutoff your article before the 500 character limit for example:</p>
+<pre><code># My New Article 
+You will see all of this on the front page
+||||PREVIEW||||
+
+But nothing after the preview statement.
+</code></pre>
+                    </div>
                     <textarea name="body"></textarea>
-                    <div>
-                        <label for="pc_image"></label>
-                        <input type="file" name="image" id="pc_image" />
+                    <div class="upload-wrapper">
+                        <label for="url_image">Add an image</label>
+                        <input type="text" name="image" id="url_image" placeholder="http://" />
                     </div>
                     <input type="submit" value="Post" />
                 </form>
