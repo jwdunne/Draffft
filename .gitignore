@@ -3,5 +3,3 @@
 .project
 .settings
 
-views/*
-!views/default
