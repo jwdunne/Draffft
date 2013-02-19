@@ -25,6 +25,8 @@
 		<script src="<?=Uri::make('core', 'assets', 'js', 'jquery.lib.js');?>"></script>
         <script src="<?=Uri::make('core', 'assets', 'js', 'ready.lib.js');?>"></script>
 		<script src="<?=Uri::make('core', 'assets', 'js', 'scmf.lib.js');?>"></script>
+		<script src="<?=Uri::make('http://assets.devxdev.com/js/jquery.validate.min.js');?>"></script>
+		<script src="<?=Application::asset_url('js/wlp.js')?>"></script>
 		<?=(isset($meta_vars) ? implode(PHP_EOL, $meta_vars) : false);?>
     </head>
     <body>

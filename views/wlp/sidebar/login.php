@@ -1,6 +1,6 @@
 <fieldset class="login-field" id="login">
     <legend><?=__('common.user-login');?></legend>
-    <form action="<?=Application::link('login');?>" method="post">
+    <form action="<?=Application::link('login');?>" method="post" id="login-form">
         <div class="clr">
             <input class="txt_input" type="text" placeholder="<?=__('common.email');?>" name="email" />
         </div>
@@ -13,7 +13,7 @@
 </fieldset>
 <fieldset class="login-field" id="register">
     <legend><?=__('common.register');?></legend>
-    <form action="<?=Application::link('register');?>" method="post">
+    <form action="<?=Application::link('register');?>" method="post" id="register-form">
         <div class="clr">
             <input class="txt_input" placeholder="Nickname" type="text" name="username" />
             <input class="txt_input double" placeholder="<?=__('common.first-name');?>" type="text" name="first" />

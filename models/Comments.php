@@ -62,7 +62,8 @@ class Comments extends Model
     }
     
     /**
-     * Note: 'in_reply': 0; is required for threading!
+     * Note: 'in_reply': 0; is required for threading! (it, grabs the parent)
+     * Possibly add {'status': 0} to only fetch non-deleted comments
      */
     public static function get_all()
     {

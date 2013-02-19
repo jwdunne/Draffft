@@ -1,11 +1,14 @@
 <?php if (Comments::open() && Auth::can('draffft_post_comment')) : ?>
     <script src="<?=Uri::make('core', 'Vendor', 'souleedit', 'sf-edit.js');?>"></script>
-    <form action="<?=Application::link('comment');?>" method="post">
+    <form id="comment-form" action="<?=Application::link('comment');?>" method="post">
         <input type="hidden" value="<?=Article::id();?>" name="article_id" />
         <input type="hidden" name="reply_to" value="0" />
-        <textarea name="comment"></textarea>
+        <textarea name="comment" id="comment-txtarea"></textarea>
         <input type="submit" value="Comment" />
     </form>
+    <?php if (Comments::count() > 0) : ?>
+    <h4 class="comments-note">Double click a comment below to reply to it! (double click again to not)</h4>
+    <?php endif; ?>
 <?php elseif (!Comments::open()) : ?>
     <h3 class="comments-status"><?=__('common.comments-closed');?></h3>
 <?php else : ?>
@@ -36,6 +39,7 @@ $(d).ready(function() {
     });
     
     $('textarea').sfedit({
+        hideOrShow: 'show',
         template:   '<h3>You are using the <a target="_blank" title="[I open in a new tab!] Learn it real quick" href="http://daringfireball.net/projects/markdown/syntax">Markdown</a> editor</h3>',
         ajaxUrl:    "<?=Application::link('comment', 'ajax');?>"
     }).scmf_scroll({

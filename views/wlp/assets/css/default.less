@@ -115,6 +115,11 @@ a, a:visited {
     }
 }
 
+label.error {
+    color:                      rgb(255, 25, 25) !important;
+    font-weight:                400;
+}
+
 header.site-header {
     width:                      100%;
     
@@ -414,6 +419,15 @@ nav {
         
         .article-comments-wrapper {
             margin:             0px 25px;
+            
+            .comments-note {
+                text-align:     center;
+                color:          @text-color-dark;
+                background:     rgb(255, 255, 210);
+                margin-top:     10px;
+                font-style:     italic;
+                font-size:      .9em;
+            }
             
             .feed-wrapper {
                 margin:         0px;
