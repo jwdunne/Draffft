@@ -16,6 +16,7 @@ namespace apps\draffft\models;
 
 use Soule\Application\Model,
     Soule\Database\Modules\Query,
+    Soule\User\Auth,
     Soule\User\User,
     Soule\Localization\Time;
 
@@ -115,9 +116,15 @@ class Comments extends Model
                 <img src="<?=User::avatar($commenter['username']);?>" alt="<?=$commenter['first'];?>'s Avatar"/>
             </div>
             <div class="article-comment-data">
-                <h4 class="comment-author-name">
+                <h4 class="comment-author-name clr">
                     <?php //<a href="mailto:<?=$commenter['email'];" title="Email me!"><?="{$commenter['first']} {$commenter['last']} ({$commenter['username']})";</a> ?>
                     <span><?="{$commenter['first']} {$commenter['last']} ({$commenter['username']})";?></span>
+                    <?php if (Auth::can('draffft_delete_comment')) : ?>
+                    <i class="icon-remove-circle delete-comment"></i>
+                    <?php endif; ?>
+                    <?php if (User::id() == $comment['user_id'] || Auth::can('draffft_edit_comment')) : ?>
+                    <!--i class="icon-pencil edit-comment"></i-->
+                    <?php endif; ?>
                 </h4>
                 <h5 class="comment-time"><?=Time::stamp($comment['date'], 'short');?> (<em><?=Time::since($comment['date']);?></em>)</h5>
                 <div class="comment-author-comment"><?=$comment['comment'];?></div>

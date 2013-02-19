@@ -95,6 +95,23 @@ Route::post('comment', function() {
 });
 
 /*
+ * Delete a comment, Reddit style.
+ */
+Route::post('comment/delete/(:num)', ['before' => 'delete-comment', 'do' => function($id) {
+    
+    Comments::update($id, ['comment' => '[deleted]', 'status' => 0]);
+    
+}]);
+
+Route::post('comment/edit/(:num)', ['before' => 'edit-comment', 'do' => function($id) {
+    
+    $comment = $_POST['comment'] . '<br />Edited: ' . Date::create();
+    
+    Comments::update($id, ['comment' => $comment, 'status' => 1]);
+    
+}]);
+
+/*
  * Route for reply previews.
  */
 Route::post('comment/ajax', function() {
@@ -127,7 +144,7 @@ Route::get('tagged/(:any)', function($tag) {
 /*
  * Create a new Article
  */
-Route::get('new', ['before' => 'author', 'do' => function() {
+Route::get('new', ['before' => 'author-article', 'do' => function() {
     
     return View::make('article/new')
         ->add('meta', 'meta', ['title' => 'Authoring A New Article | ' . ucwords(Application::info('public_name'))]);
@@ -247,20 +264,32 @@ Route::any('*', function() {
  * Filters
  * ['before' => 'FILTER_NAME', 'do' => function() {}]
  */
-Route::filter('edit', function() {
+Route::filter('edit-article', function() {
     if (!Auth::can('draffft_edit_article')) {
-        return Response::redirect(Application::link('#login'));
+        return Response::redirect(Application::link());
     }
 });
 
-Route::filter('author', function() {
+Route::filter('author-article', function() {
     if (!Auth::can('draffft_post_article')) {
-        return Response::redirect(Application::link('#login'));
+        return Response::redirect(Application::link());
     }
 });
 
-Route::filter('delete', function() {
+Route::filter('delete-article', function() {
     if (!Auth::can('draffft_delete_article')) {
-        return Response::redirect(Application::link('#login'));
+        return Response::redirect(Application::link());
+    }
+});
+
+Route::filter('delete-comment', function() {
+    if (!Auth::can('draffft_delete_comment')) {
+        return Response::redirect(Application::link());
+    }
+});
+
+Route::filter('edit-comment', function() {
+    if (!Auth::can('draffft_edit_comment')) {
+        return Response::redirect(Application::link());
     }
 });

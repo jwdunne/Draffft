@@ -33,7 +33,7 @@ $(d).ready(function() {
                 hold.val(reply_to);
                 t.css('border-left', '5px solid rgb(220, 25, 25)');
             }
-    }).attr('title', 'Double click me to reply to me!');
+    });
     
     $('textarea').sfedit({
         template:   '<h3>You are using the <a target="_blank" title="[I open in a new tab!] Learn it real quick" href="http://daringfireball.net/projects/markdown/syntax">Markdown</a> editor</h3>',
@@ -47,6 +47,24 @@ $(d).ready(function() {
     });
     
     <?php endif; ?>
+
+    $('.delete-comment').on('click', function() {
+        var t       = $(this),
+            comment = t.parents('.article-comments-container'),
+            author  = comment.find('.comment-author-name span').text(),
+            curl    = app_url + 'comment/delete/' + comment.attr('id');
+            
+        if (confirm("Delete comment by " + author + "?"))
+        {
+            $.ajax({
+                type: 'POST',
+                url: curl,
+                success: function() {
+                    comment.remove();
+                }
+            });
+        }
+    });
 
     $('.in-reply').each(function(i, el) {
         $(el).css({
