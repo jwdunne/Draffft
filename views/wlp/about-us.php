@@ -1,7 +1,8 @@
 <?=$meta;?>
 <div class="body-wrapper clr">
     <section class="grid-full">
-        <?php foreach (Group::users(1) as $user) : ?>
+    <?php foreach ([1, 2, 6] as $group) : ?>
+        <?php foreach (Group::users($group) as $user) : ?>
         <article class="article-overview-wrapper clr">
             <header class="article-title clr">
                 <h2><?=("{$user['first']} {$user['last']} ({$user['username']})");?></h2>
@@ -18,6 +19,7 @@
             </div>
         </article>
         <?php endforeach; ?>
+    <?php endforeach; ?>
     </section>
 </div>
 <?=$footer;?>
