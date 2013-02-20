@@ -10,7 +10,7 @@
             
             <div class="image-wrapper">
                 <div class="image-container">
-                    <img src="<?=User::avatar($user['username']);?>" alt="" />
+                    <img class="about-us-img" src="<?=User::avatar($user['username']);?>" alt="<?=$user['username'];?>&#39;s avatar" />
                 </div>
             </div>
             

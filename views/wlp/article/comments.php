@@ -51,29 +51,5 @@ $(d).ready(function() {
     });
     
     <?php endif; ?>
-
-    $('.delete-comment').on('click', function() {
-        var t       = $(this),
-            comment = t.parents('.article-comments-container'),
-            author  = comment.find('.comment-author-name span').text(),
-            curl    = app_url + 'comment/delete/' + comment.attr('id');
-            
-        if (confirm("Delete comment by " + author + "?"))
-        {
-            $.ajax({
-                type: 'POST',
-                url: curl,
-                success: function() {
-                    comment.remove();
-                }
-            });
-        }
-    });
-
-    $('.in-reply').each(function(i, el) {
-        $(el).css({
-            'margin-left': 15 * (i + 1)
-        });
-    });
 });
 </script>

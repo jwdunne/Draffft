@@ -1,6 +1,8 @@
         <footer class="site-footer clr">
             <div class="powered-by">
-                <img src="<?=Application::asset_url('images/soule.png');?>" alt="" />
+                <a href="http://soule.devxdev.com">
+                    <img src="<?=Application::asset_url('images/soule.png');?>" alt="" />
+                </a>
             </div>
             <div class="meta">
                 <ol class="clr">
@@ -24,14 +26,5 @@
             </div>
         </footer>
         <script src="<?=Uri::make('core', 'assets', 'js', 'scmf-2.js');?>"></script>
-        <script>
-        $(d).ready(function() {
-            $('.header-image').css({
-                position: 'relative',
-                top:      SCMF.position.verticalCenter('.header-image', '.header-image-container'),
-                margin:   '0 5%'
-            });
-        });
-        </script>
     </body>
 </html>
