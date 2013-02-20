@@ -206,7 +206,25 @@ Route::get('feed/(:any)', function($timeline) {
  * Login
  */
 Route::get('login', function() {
-    return Response::redirect(Applicaiton::link('#login'));
+    
+});
+
+Route::get('login/facebook', function() {
+    
+    /*
+     * Alias for FacebookApiWrapper
+     */
+    FB::make();
+    
+    if (FB::user()) {
+        try {
+            $user = FB::facebook()->api('/me');
+        } catch (Soule\User\Facebook\Exception\FacebookApiException $e) {
+            Log::write($e, 'info');
+            
+        }
+    }
+    
 });
 
 /**
@@ -221,6 +239,7 @@ Route::post('login', function() {
     
     return Response::redirect(Application::link('#login'));
 });
+
 
 /*
  * Registration
@@ -258,6 +277,12 @@ Route::get(['pingback', 'trackback', 'xmlrpc', 'comment', 'comment/ajax'], funct
 Route::any('*', function() {
     return View::make('error/404', ['item' => ""])
         ->add('meta', 'meta', ['title' => "Error 404"]);
+});
+
+Route::get('debug', function() {
+    if (defined('DEBUG') && DEBUG) {
+        return View::make('debug');
+    }
 });
 
 /*
